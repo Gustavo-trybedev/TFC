@@ -9,11 +9,11 @@ module.exports = {
         autoIncrement: true,
         allowNull: false,
       },
-      homeTeamId: { type: Sequelize.INTEGER },
-      homeTeamGoals: { type: Sequelize.INTEGER },
-      awayTeamId: { type: Sequelize.INTEGER },
-      awayTeamGoals: { type: Sequelize.INTEGER },
-      inProgress: { type: Sequelize.BOOLEAN },
+      home_team_id: { type: Sequelize.INTEGER },
+      home_team_goals: { type: Sequelize.INTEGER },
+      away_team_id: { type: Sequelize.INTEGER },
+      away_team_goals: { type: Sequelize.INTEGER },
+      in_progress: { type: Sequelize.BOOLEAN },
     });
   },
 
