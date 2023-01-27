@@ -5,9 +5,8 @@ const teamController = new TeamController();
 
 const router = express.Router();
 
-router.get(
-  '/',
-  teamController.getAllTeams,
-);
+router.get('/', teamController.getAllTeams);
+
+router.get('/:id', teamController.getTeamById);
 
 export default router;
