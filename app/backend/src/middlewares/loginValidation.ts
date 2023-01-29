@@ -23,8 +23,6 @@ export default class loginValidation {
       console.log(error);
     }
 
-    req.body.user = req.body;
-
     next();
   };
 
@@ -41,12 +39,15 @@ export default class loginValidation {
       }
       const authoredUser = jwt.verifyToken(token as string);
 
+      if (!authoredUser) {
+        return res.status(401).json({ message: 'Token must be a valid token' });
+      }
+
       req.body.user = authoredUser;
 
       next();
     } catch (error) {
       console.log(error);
-      return res.status(401).json({ message: 'Token must be a valid token' });
     }
   };
 
