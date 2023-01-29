@@ -18,7 +18,7 @@ router.post(
 router.get(
   '/validate',
   loginValidationMiddleware.validateToken,
-  loginController.userRole,
+  loginController.getUserRole,
 );
 
 export default router;
