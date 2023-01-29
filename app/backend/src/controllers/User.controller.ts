@@ -1,7 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
 import JWTMethods from '../auth/JWT';
+import LoginService from '../services/User.service';
 
 const jwt = new JWTMethods();
+const userService = new LoginService();
 
 export default class LoginController {
   public login = async (
@@ -21,17 +23,17 @@ export default class LoginController {
     }
   };
 
-  public userRole = async (
+  public getUserRole = async (
     req: Request,
     res: Response,
     next: NextFunction,
   ) => {
     try {
-      const { user } = req.body;
+      const { email } = req.body.user;
 
-      if (user.email === 'admin@admin.com') {
-        return res.status(200).json({ role: 'admin' });
-      }
+      const user = await userService.getUserByEmail(email);
+
+      return res.status(200).json({ role: user.role });
     } catch (error) {
       next(error);
     }
