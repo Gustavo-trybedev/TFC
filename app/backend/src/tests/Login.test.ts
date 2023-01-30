@@ -76,7 +76,18 @@ describe('Login test', () => {
     expect(chaiHttpResponse.body).to.be.deep.equal({ message: 'Incorrect email or password' });
   });
 
-  it('5 - Should return status 200 and a token in case of successful login', async () => {
+  it('5 - Should return an error if dont pass the token in the header', async () => {
+    chaiHttpResponse = await chai
+    .request(app)
+    .get('/login/validate')
+    .set('authorization', '');
+
+    expect(chaiHttpResponse).to.have.status(401);
+    expect(chaiHttpResponse.body).to.have.property('message');
+    expect(chaiHttpResponse.body.message).to.be.deep.equal('Token not found');
+  })
+
+  it('6 - Should return status 200 and a token in case of successful login', async () => {
     sinon.stub(UserModel, 'findOne').resolves(validAdmin as UserModel);
     sinon.stub(bcrypt, 'compareSync').returns(true);
 
@@ -89,7 +100,7 @@ describe('Login test', () => {
     expect(chaiHttpResponse.body).to.have.property('token');
   });
 
-  it('6 - Should return the user role', async () => {
+  it('7 - Should return the user role', async () => {
     sinon.stub(UserModel, 'findOne').resolves(validAdmin as UserModel);
 
     chaiHttpResponse = await chai
