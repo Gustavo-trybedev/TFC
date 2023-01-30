@@ -12,8 +12,10 @@ router.post(
   '/',
   matchValidation.validateTeamExistence,
   matchValidation.validateTeams,
+  matchValidation.validateToken,
   matchController.insertNewMatch,
 );
 router.patch('/:id/finish', matchController.updateMatch);
+router.patch('/:id/', matchController.updateScore);
 
 export default router;
