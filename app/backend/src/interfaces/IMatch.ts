@@ -1,7 +1,9 @@
 import { ITeam } from './ITeam';
 
+export interface IMatchesID {
+  id: number,
+}
 export interface IMatchesBody {
-  id?: number,
   homeTeamId: number,
   awayTeamId: number,
   homeTeamGoals: number,
@@ -9,7 +11,7 @@ export interface IMatchesBody {
   inProgress: boolean,
 }
 
-export interface IMatches extends IMatchesBody {
+export interface IMatches extends IMatchesBody, IMatchesID {
   homeTeam: ITeam,
   awayTeam: ITeam,
 }
