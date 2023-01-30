@@ -36,4 +36,19 @@ export default class MatchesService {
 
     return match;
   };
+
+  public updateMatchScore = async (
+    id: number,
+    homeTeamGoals: number,
+    awayTeamGoals: number,
+  ): Promise<IMatchesBody | undefined> => {
+    const updateScore = await MatchesModel.update(
+      { homeTeamGoals, awayTeamGoals },
+      { where: { id } },
+    );
+
+    if (!updateScore) return undefined;
+
+    return updateScore as unknown as IMatchesBody;
+  };
 }
