@@ -1,4 +1,4 @@
-export const matches = [
+export const matchesNotInProgress = [
     {
       id: 1,
       homeTeamId: 16,
@@ -83,6 +83,20 @@ export const matchesInProgress = [
       inProgress: 1,
     },
 ];
+
+export const validMatch = {
+  homeTeamId: 16,
+  homeTeamGoals: 1,
+  awayTeamId: 8,
+  awayTeamGoals: 1,
+};
+
+export const invalidMatch = {
+  homeTeamId: 1,
+  homeTeamGoals: 1312,
+  awayTeamId: 1,
+  awayTeamGoals: 1,
+};
 
 export const allMatches = [
     {

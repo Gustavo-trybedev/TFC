@@ -8,7 +8,15 @@ import { App } from '../app';
 
 import MatchModel from '../database/models/Matches';
 
-import { allMatches, matches, matchesInProgress } from './mocks/matchesMock';
+import {
+    allMatches,
+    invalidMatch,
+    matchesNotInProgress,
+    matchesInProgress,
+    validMatch,
+} from './mocks/matchesMock';
+
+import { token, validAdmin } from './mocks/loginMock';
 
 import { Response } from 'superagent';
 
@@ -46,15 +54,53 @@ describe('Matches test', () => {
      });
 
     it('3 - Should return the matches not in progress', async () => {
-        sinon.stub(MatchModel, 'findAll').resolves(matches as unknown as MatchModel[]);
+        sinon.stub(MatchModel, 'findAll').resolves(matchesNotInProgress as unknown as MatchModel[]);
         chaiHttpResponse = await chai
         .request(app)
         .get('/matches?inProgress=false');
             
         expect(chaiHttpResponse.status).to.be.equal(200);
-        expect(chaiHttpResponse.body).to.be.deep.equal(matches);
+        expect(chaiHttpResponse.body).to.be.deep.equal(matchesNotInProgress);
+    });
+
+    it('4 - Should return an error when try to create a match with invalid token', async () => {
+        chaiHttpResponse = await chai
+        .request(app)
+        .post('/matches')
+        .send(validMatch)
+        .set('authorization', 'token');
+            
+        expect(chaiHttpResponse.status).to.be.equal(401);
+        expect(chaiHttpResponse.body).to.be.deep.equal({ message: 'Token must be a valid token' });
+    });
+
+    it('5 - Should return an error when try to create a match with two equal teams', async () => {
+        chaiHttpResponse = await chai
+        .request(app)
+        .post('/matches')
+        .send(invalidMatch)
+        .set('authorization', token);
+            
+        expect(chaiHttpResponse.status).to.be.equal(422);
+        expect(chaiHttpResponse.body).to.be.deep.equal({ message: 'It is not possible to create a match with two equal teams' });
     });
 
 
-    
+    it('6 - Create a match successfully', async () => {
+        sinon.stub(MatchModel, 'create').resolves(validMatch as unknown as MatchModel);
+
+        const { body: { token }} = await chai
+        .request(app)
+        .post('/login')
+        .send(validAdmin);
+
+        chaiHttpResponse = await chai
+        .request(app)
+        .post('/matches')
+        .set({ authorization: token})
+        .send(validMatch);
+            
+        expect(chaiHttpResponse.status).to.be.equal(201);
+        expect(chaiHttpResponse.body).to.be.deep.equal(validMatch);
+    });
 });
