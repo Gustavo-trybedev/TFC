@@ -14,9 +14,10 @@ import {
     matchesNotInProgress,
     matchesInProgress,
     validMatch,
+    equalTeams,
 } from './mocks/matchesMock';
 
-import { token, validAdmin } from './mocks/loginMock';
+import { token } from './mocks/loginMock';
 
 import { Response } from 'superagent';
 
@@ -74,25 +75,40 @@ describe('Matches test', () => {
         expect(chaiHttpResponse.body).to.be.deep.equal({ message: 'Token must be a valid token' });
     });
 
-    it('5 - Should return an error when try to create a match with two equal teams', async () => {
+    it('5 - Should return an error when try to create a match without token', async () => {
         chaiHttpResponse = await chai
         .request(app)
         .post('/matches')
-        .send(invalidMatch)
+        .send(validMatch);
+            
+        expect(chaiHttpResponse.status).to.be.equal(401);
+        expect(chaiHttpResponse.body).to.be.deep.equal({ message: 'Token not found' });
+    });
+
+    it('6 - Should return an error when try to create a match with two equal teams', async () => {
+        chaiHttpResponse = await chai
+        .request(app)
+        .post('/matches')
+        .send(equalTeams)
         .set('authorization', token);
             
         expect(chaiHttpResponse.status).to.be.equal(422);
         expect(chaiHttpResponse.body).to.be.deep.equal({ message: 'It is not possible to create a match with two equal teams' });
     });
 
-
-    it('6 - Create a match successfully', async () => {
-        sinon.stub(MatchModel, 'create').resolves(validMatch as unknown as MatchModel);
-
-        const { body: { token }} = await chai
+    it('7 - Should return an error when try to create a match with inexistent teams', async () => {
+        chaiHttpResponse = await chai
         .request(app)
-        .post('/login')
-        .send(validAdmin);
+        .post('/matches')
+        .set({ authorization: token})
+        .send(invalidMatch);
+            
+        expect(chaiHttpResponse.status).to.be.equal(404);
+        expect(chaiHttpResponse.body).to.be.deep.equal({ message: 'There is no team with such id!' });
+    });
+
+    it('8 - Create a match successfully', async () => {
+        sinon.stub(MatchModel, 'create').resolves(validMatch as unknown as MatchModel);
 
         chaiHttpResponse = await chai
         .request(app)

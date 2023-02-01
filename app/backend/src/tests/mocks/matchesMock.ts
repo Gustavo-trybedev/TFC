@@ -91,10 +91,17 @@ export const validMatch = {
   awayTeamGoals: 1,
 };
 
+export const equalTeams = {
+  homeTeamId: 16,
+  homeTeamGoals: 1,
+  awayTeamId: 16,
+  awayTeamGoals: 1,
+};
+
 export const invalidMatch = {
-  homeTeamId: 1,
-  homeTeamGoals: 1312,
-  awayTeamId: 1,
+  homeTeamId: 9999,
+  homeTeamGoals: 1,
+  awayTeamId: 6666,
   awayTeamGoals: 1,
 };
 
