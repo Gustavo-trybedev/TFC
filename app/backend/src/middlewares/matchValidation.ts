@@ -42,9 +42,7 @@ export default class MatchValidation {
     if (!token) return res.status(401).json({ message: 'Token not found' });
 
     try {
-      const data = jwt.verifyToken(token as string);
-
-      if (!data) return res.status(401).json({ message: 'Token must be a valid token' });
+      jwt.verifyToken(token as string);
     } catch (error) {
       if (error instanceof Error) {
         const { message } = error;
@@ -53,7 +51,6 @@ export default class MatchValidation {
         console.log(error);
       }
     }
-
     next();
   };
 }
