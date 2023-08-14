@@ -37,11 +37,11 @@ Desenvolvido uma API consumindo um banco de dados, utilizando principios SOLID e
 
 1. Clone o repositório
 ```bash
-  git clone git@github.com:Fedolfo/Trybe-futebol-clube.git
+  git clone git@github.com:Gustavo-trybedev/TFC.git
 ```
 2. Entre no arquivo
 ```bash
-  cd Trybe-futebol-clube
+  cd TFC
 ```
 3. Suba os containêrs
 ```bash
